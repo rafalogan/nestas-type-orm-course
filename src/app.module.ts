@@ -1,6 +1,8 @@
 import { Module, forwardRef } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
@@ -8,14 +10,13 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
-import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
 import { FileModule } from './file/file.module';
+import { UserEntity } from './user/entities/user.entity';
 
 @Module({
 	imports: [
-		ConfigModule.forRoot(),
+		ConfigModule.forRoot({ envFilePath: './.env' }),
 		ThrottlerModule.forRoot([
 			{
 				ttl: 60000,
@@ -23,7 +24,6 @@ import { FileModule } from './file/file.module';
 			},
 		]),
 		forwardRef(() => UserModule),
-		DatabaseModule,
 		forwardRef(() => AuthModule),
 		FileModule,
 		MailerModule.forRoot({
@@ -45,6 +45,16 @@ import { FileModule } from './file/file.module';
 					strict: true,
 				},
 			},
+		}),
+		TypeOrmModule.forRoot({
+			type: process.env.DATABASE_TYPE as 'mysql',
+			host: process.env.DATABASE_HOST,
+			port: Number(process.env.DATABASE_PORT),
+			username: process.env.DATABASE_USER,
+			password: process.env.DATABASE_PASSWORD,
+			database: process.env.DATABASE_NAME,
+			entities: [UserEntity],
+			synchronize: process.env.NODE_ENV === 'development',
 		}),
 	],
 	controllers: [AppController],

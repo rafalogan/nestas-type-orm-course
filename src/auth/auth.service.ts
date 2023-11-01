@@ -1,17 +1,18 @@
-import { BadRequestException, Catch, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
 
 import { MailerService } from '@nestjs-modules/mailer';
 
 import { AuthSigninDTO } from './dto/auth-signin.dto';
-import { PrismaService } from 'src/database/prisma.service';
 import { existsOrError } from 'src/utils';
 import { AuthRecoveryDTO } from './dto/auth-recovery.dto';
-import { User } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
 import { AuthSignupDTO } from './dto/auth-signup.dto';
 import { error } from 'console';
 import { compare, genSalt, hash } from 'bcrypt';
+import { UserEntity } from 'src/user/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +21,9 @@ export class AuthService {
 
 	constructor(
 		private readonly jwtService: JwtService,
-		private readonly prisma: PrismaService,
+
+		@InjectRepository(UserEntity)
+		private readonly userRepository: Repository<UserEntity>,
 		private readonly userService: UserService,
 		private readonly mailer: MailerService,
 	) {}
@@ -46,7 +49,7 @@ export class AuthService {
 
 	async signin(credentials: AuthSigninDTO) {
 		const { email, password } = credentials;
-		const user = await this.prisma.user.findFirst({ where: { email } });
+		const user = await this.userRepository.findOne({ where: { email } });
 
 		existsOrError(user, new UnauthorizedException('user unauthorized. verify your email or password and try aigate again'));
 
@@ -66,7 +69,7 @@ export class AuthService {
 	}
 
 	async forget(email: string) {
-		const user = await this.prisma.user.findUnique({ where: { email } });
+		const user = await this.userRepository.findOne({ where: { email } });
 
 		existsOrError(user, new UnauthorizedException('invalid email'));
 
@@ -102,12 +105,8 @@ export class AuthService {
 			const { id } = this.jwtService.verify(token, { audience: this.audience, issuer: 'forget' });
 			const password = await hash(newPassword, await genSalt());
 
-			const user = await this.prisma.user.update({
-				where: { id },
-				data: {
-					password,
-				},
-			});
+			await this.userRepository.update({ id }, { password });
+			const user = await this.userService.findOne(id);
 
 			return this.generateToken(user);
 		} catch (err: any) {
@@ -115,7 +114,7 @@ export class AuthService {
 		}
 	}
 
-	private async generateToken(user: User) {
+	private async generateToken(user: UserEntity) {
 		existsOrError(user?.active, new UnauthorizedException('user unauthorized'));
 
 		const { id, name, email, birthAt, rule } = user;

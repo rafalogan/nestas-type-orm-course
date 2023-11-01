@@ -8,7 +8,7 @@ export class AuthGuard implements CanActivate {
 	constructor(
 		private readonly authService: AuthService,
 		private readonly userService: UserService,
-	) { }
+	) {}
 
 	async canActivate(context: ExecutionContext) {
 		const request = context.switchToHttp().getRequest();

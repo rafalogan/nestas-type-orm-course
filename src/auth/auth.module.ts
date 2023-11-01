@@ -1,21 +1,22 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserModule } from 'src/user/user.module';
-import { DatabaseModule } from 'src/database/database.module';
 import { FileModule } from 'src/file/file.module';
-
-console.log('auth secret', process.env.AUTHSECRET);
+import { UserEntity } from 'src/user/entities/user.entity';
+import { log } from 'node:console';
 
 @Module({
 	imports: [
 		JwtModule.register({
-			secret: process.env.AUTHSECRET,
+			secret: String(process.env.AUTHSECRET),
 		}),
 		forwardRef(() => UserModule),
-		DatabaseModule,
 		FileModule,
+		TypeOrmModule.forFeature([UserEntity]),
 	],
 	exports: [AuthService],
 	providers: [AuthService],

@@ -18,7 +18,7 @@ import { SkipThrottle } from '@nestjs/throttler';
 @UseGuards(AuthGuard, RuleGuard)
 @Controller('users')
 export class UserController {
-	constructor(private userService: UserService) { }
+	constructor(private userService: UserService) {}
 
 	// @UseInterceptors(LogInterceptor)
 	@Post()

@@ -11,7 +11,7 @@ import {
 	UseGuards,
 	UseInterceptors,
 } from '@nestjs/common';
-import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 
 import { AuthSigninDTO } from './dto/auth-signin.dto';
 import { AuthSignupDTO } from './dto/auth-signup.dto';
