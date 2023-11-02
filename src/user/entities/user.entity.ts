@@ -15,17 +15,17 @@ export class UserEntity {
 	password: string;
 
 	@Column({ type: 'timestamp', nullable: true })
-	birthAt: Date;
+	birthAt?: Date;
 
 	@Column({ default: true })
 	active: boolean;
 
 	@Column({ default: 1 })
-	rule: number;
+	rule?: number;
 
 	@CreateDateColumn({ type: 'timestamp' })
-	createdAt: Date;
+	createdAt?: Date;
 
 	@UpdateDateColumn({ type: 'timestamp' })
-	updatedAt: Date;
+	updatedAt?: Date;
 }

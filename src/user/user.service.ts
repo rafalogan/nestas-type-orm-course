@@ -9,7 +9,6 @@ import { existsOrError, notExistisOrError } from 'src/utils';
 import { genSalt, hash } from 'bcrypt';
 import { log } from 'console';
 import { UserEntity } from './entities/user.entity';
-import { exit } from 'process';
 
 @Injectable()
 export class UserService {

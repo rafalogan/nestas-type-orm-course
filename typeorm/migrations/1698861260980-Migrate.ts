@@ -10,11 +10,11 @@ export class Migrate1698861260980 implements MigrationInterface {
 					{ name: 'name', type: 'varchar', length: '155' },
 					{ name: 'email', type: 'varchar', length: '155', isUnique: true },
 					{ name: 'password', type: 'varchar', length: '155' },
-					{ name: 'birthAt', type: 'timestamp', isNull: true },
+					{ name: 'birthAt', type: 'timestamp', isNullable: true },
 					{ name: 'active', type: 'boolean', default: true },
 					{ name: 'rule', type: 'integer', default: '1' },
 					{ name: 'createdAt', type: 'timestamp', default: 'CURRENT_TIMESTAMP()' },
-					{ name: 'updatedAt', type: 'timestamp', isNull: true },
+					{ name: 'updatedAt', type: 'timestamp', isNullable: true },
 				],
 			}),
 		);
