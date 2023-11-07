@@ -6,7 +6,8 @@
 		"deleteOutDir": true,
 		"assets": [
 			{
-				"include": "templates/**/*"
+				"include": "templates/**/*.*",
+				"outDir": "dist/src"
 			}
 		]
 	}

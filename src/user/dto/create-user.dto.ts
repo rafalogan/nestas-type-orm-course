@@ -21,9 +21,9 @@ export class CreateUserDto {
 
 	@Optional()
 	@IsDateString()
-	birthAt: string;
+	birthAt?: string;
 
 	@IsOptional()
 	@IsEnum(Rule)
-	rule: number;
+	rule?: number;
 }

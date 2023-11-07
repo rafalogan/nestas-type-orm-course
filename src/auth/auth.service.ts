@@ -9,7 +9,7 @@ import { existsOrError } from 'src/utils';
 import { AuthRecoveryDTO } from './dto/auth-recovery.dto';
 import { UserService } from 'src/user/user.service';
 import { AuthSignupDTO } from './dto/auth-signup.dto';
-import { error } from 'console';
+import { error, log } from 'console';
 import { compare, genSalt, hash } from 'bcrypt';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -61,6 +61,8 @@ export class AuthService {
 	}
 
 	async signup(data: AuthSignupDTO) {
+		data.rule = undefined;
+
 		const user = await this.userService.create(data);
 
 		existsOrError(user, new InternalServerErrorException('signup failed internal error'));
@@ -72,6 +74,8 @@ export class AuthService {
 		const user = await this.userRepository.findOne({ where: { email } });
 
 		existsOrError(user, new UnauthorizedException('invalid email'));
+
+		log('user to forget', user);
 
 		const { id } = user;
 

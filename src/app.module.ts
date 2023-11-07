@@ -16,7 +16,7 @@ import { UserEntity } from './user/entities/user.entity';
 
 @Module({
 	imports: [
-		ConfigModule.forRoot({ envFilePath: './.env' }),
+		ConfigModule.forRoot(),
 		ThrottlerModule.forRoot([
 			{
 				ttl: 60000,

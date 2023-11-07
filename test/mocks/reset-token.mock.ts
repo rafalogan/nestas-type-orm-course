@@ -1,0 +1,2 @@
+export const resetTokenMock =
+	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJmYWJpLnBlcnJ1Y2hAZmJwLmNvbSIsImlhdCI6MTY5OTM3ODk4NSwiZXhwIjoxNjk5MzgwNzg1LCJhdWQiOiJzaWduaW4iLCJpc3MiOiJmb3JnZXQiLCJzdWIiOiIxIn0.-32nkt0WcdUDwk-Br7j-GZh9OXwWx5Guk6ZvtRYYGqE';
