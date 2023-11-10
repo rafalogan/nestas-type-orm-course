@@ -6,13 +6,14 @@ import { join, resolve } from 'node:path';
 
 @Injectable()
 export class FileService {
+	private isLocalStorage = !process.env.STORAGE || process.env.STORAGE.toLowerCase() === 'local';
 	constructor() {}
 
 	async upload(file: Express.Multer.File, filename: string, folder = 'upload') {
 		try {
 			const path = resolve(__dirname, '..', '..', './tmp/storage', folder);
 
-			if (process.env.STORAGE === 'local' && !existsSync(path)) {
+			if (this.isLocalStorage && !existsSync(path)) {
 				await mkdir(path, { recursive: true });
 			}
 

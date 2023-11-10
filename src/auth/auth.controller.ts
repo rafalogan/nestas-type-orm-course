@@ -21,6 +21,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { User } from 'src/decorators/user.decorator';
 import { FileService } from 'src/file/file.service';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -51,15 +52,15 @@ export class AuthController {
 
 	@UseGuards(AuthGuard)
 	@Get('verify-token')
-	verifyToken(@User(['id', 'name']) user: any) {
-		return { user };
+	verifyToken(@User(['id', 'name']) user: UserEntity) {
+		return user;
 	}
 
 	@UseInterceptors(FileInterceptor('file'))
 	@UseGuards(AuthGuard)
 	@Post('photo')
 	async uploadPhoto(
-		@User() user: any,
+		@User() user: UserEntity,
 		@UploadedFile(
 			new ParseFilePipe({
 				validators: [new FileTypeValidator({ fileType: 'image/*' }), new MaxFileSizeValidator({ maxSize: 1024 * 50 })],

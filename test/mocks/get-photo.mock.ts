@@ -2,7 +2,7 @@ import { resolve } from 'node:path';
 import { getBufferToFileMock } from './get-buffer-to-file.mock';
 
 export const getPhotoMock = async () => {
-	const { stream, buffer } = await getBufferToFileMock(resolve(__dirname, 'photo-test.jpg'));
+	const { stream, buffer } = await getBufferToFileMock(resolve(__dirname, '..', 'photo-test.jpg'));
 
 	const photo: Express.Multer.File = {
 		fieldname: 'file',
