@@ -1,7 +1,7 @@
 import { Rule } from 'src/enums/rule.enum';
 import { UpdatePutUserDTO } from 'src/user/dto/update-put-user.dto';
 
-export const useUpdatePutDTOMock: UpdatePutUserDTO = {
+export const userUpdatePutDTOMock: UpdatePutUserDTO = {
 	name: 'Alice Johnson',
 	email: 'alice@example.com',
 	password: '123456',
