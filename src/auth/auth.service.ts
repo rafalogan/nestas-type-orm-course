@@ -53,6 +53,8 @@ export class AuthService {
 
 		existsOrError(user, new UnauthorizedException('user unauthorized. verify your email or password and try aigate again'));
 
+		console.log('user to login', user);
+
 		const isMatch = await compare(password, user.password);
 
 		existsOrError(isMatch, new UnauthorizedException('user unauthorized. verify your email or password and try aigate again'));

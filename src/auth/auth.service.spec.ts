@@ -10,9 +10,14 @@ import { jwtPayloadMock } from 'test/mocks/jwt-payload.mock';
 import { payloadMock } from 'test/mocks/payload.mock';
 import { resetTokenMock } from 'test/mocks/reset-token.mock';
 import { authSignupDTOMock } from 'test/mocks/auth-signup-dto.mock';
+import { AuthRecoveryDTO } from './dto/auth-recovery.dto';
+import { authRecoveryDTOMock } from 'test/mocks/auth-recovey-dto.mock';
+import { UserService } from 'src/user/user.service';
+import { userEntityListMock } from 'test/mocks/user-entity-list.mock';
 
 describe('AuthService', () => {
 	let service: AuthService;
+	let userService: UserService;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -20,10 +25,12 @@ describe('AuthService', () => {
 		}).compile();
 
 		service = module.get<AuthService>(AuthService);
+		userService = module.get<UserService>(UserService);
 	});
 
 	it('should be defined', () => {
 		expect(service).toBeDefined();
+		expect(userService).toBeDefined();
 	});
 
 	describe('token', () => {
@@ -42,6 +49,8 @@ describe('AuthService', () => {
 
 	describe('Authentication', () => {
 		it('should be called signin method', async () => {
+			jest.spyOn(userService, 'findOne').mockResolvedValueOnce(userEntityListMock[0]);
+
 			const result = await service.signin({ email: 'alice@example.com', password: '123456' });
 
 			expect(result).toEqual(payloadMock);
@@ -60,7 +69,7 @@ describe('AuthService', () => {
 		});
 
 		it('should be called recovery method', async () => {
-			const result = await service.recover({ password: '123456', token: resetTokenMock });
+			const result = await service.recover(authRecoveryDTOMock);
 
 			expect(result).toEqual(payloadMock);
 		});

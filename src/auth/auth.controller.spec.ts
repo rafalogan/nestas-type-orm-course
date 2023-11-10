@@ -9,27 +9,32 @@ import { payloadMock } from 'test/mocks/payload.mock';
 import { authForgetDTOMock } from 'test/mocks/auth-forget-dto.mock';
 import { authRecoveryDTOMock } from 'test/mocks/auth-recovey-dto.mock';
 import { userEntityListMock } from 'test/mocks/user-entity-list.mock';
-import { jwtPayloadMock } from 'test/mocks/jwt-payload.mock';
-import { accessTokenMock } from 'test/mocks/token.mock';
+
 import { getPhotoMock } from 'test/mocks/get-photo.mock';
+import { authSigninDTOMock } from 'test/mocks/auth-signin-dto.mock';
+import { userServiceMock } from 'test/mocks/user-service.mock';
+import { UserService } from 'src/user/user.service';
 
 describe('AuthController', () => {
 	let controller: AuthController;
+	let userService: UserService;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
 			controllers: [AuthController],
-			providers: [authServiceMock, fileServiceMock],
+			providers: [authServiceMock, fileServiceMock, userServiceMock],
 		})
 			.overrideGuard(AuthGuard)
 			.useValue(guardMock)
 			.compile();
 
 		controller = module.get<AuthController>(AuthController);
+		userService = module.get<UserService>(UserService);
 	});
 
 	it('should be defined', () => {
 		expect(controller).toBeDefined();
+		expect(userService).toBeDefined();
 	});
 
 	it('should be applicated Guards', () => {
@@ -39,7 +44,8 @@ describe('AuthController', () => {
 	});
 
 	it('should be called signin', async () => {
-		const result = await controller.signin(authSignupDTOMock);
+		jest.spyOn(userService, 'findOne').mockResolvedValueOnce(userEntityListMock[0]);
+		const result = await controller.signin(authSigninDTOMock);
 
 		expect(result).toEqual(payloadMock);
 	});
