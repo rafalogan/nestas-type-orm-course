@@ -2,7 +2,9 @@ import dotenv from 'dotenv';
 import { log } from 'node:console';
 import { DataSource } from 'typeorm';
 
-dotenv.config();
+const isTest = process.env.NODE_ENV === 'test';
+
+dotenv.config({ path: isTest ? '.env.test' : '.env' });
 
 const dataSource = new DataSource({
 	type: process.env.DATABASE_TYPE as 'mysql',
@@ -11,6 +13,7 @@ const dataSource = new DataSource({
 	username: process.env.DATABASE_USER,
 	password: process.env.DATABASE_PASSWORD,
 	database: process.env.DATABASE_NAME,
+	synchronize: true,
 });
 
 log('data source', dataSource);

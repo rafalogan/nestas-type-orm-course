@@ -7,7 +7,6 @@ import { AuthController } from './auth.controller';
 import { UserModule } from 'src/user/user.module';
 import { FileModule } from 'src/file/file.module';
 import { UserEntity } from 'src/user/entities/user.entity';
-import { log } from 'node:console';
 
 @Module({
 	imports: [

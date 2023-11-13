@@ -20,5 +20,7 @@ describe('FileService', () => {
 	it('should be called upload method', async () => {
 		const photMock = await getPhotoMock();
 		const result = await service.upload(photMock, 'photo-teste.jpg');
+
+		expect(result).toEqual({ message: 'file uploaded successfully' });
 	});
 });
